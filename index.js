@@ -1,57 +1,54 @@
-const cluster = require('cluster');
 const numCPUs = require('os').cpus().length;
 
-if (cluster.isPrimary) {
-  console.log(`Primary ${process.pid} is running`);
-
-  // Crie um worker para cada CPU disponível
-  for (let i = 0; i < numCPUs; i++) {
-    cluster.fork();
-  }
-
-  cluster.on('exit', (worker, code, signal) => {
-    console.log(`Worker ${worker.process.pid} died. Creating a new worker.`);
-    cluster.fork();
-  });
-
-  // Escute eventos de fork de novos workers
-  cluster.on('fork', (worker) => {
-    console.log(`Worker ${worker.process.pid} was forked`);
-  });
-
-  // Escute eventos de saída de workers
-  cluster.on('exit', (worker, code, signal) => {
-    console.log(`Worker ${worker.process.pid} died with code ${code} and signal ${signal}`);
-    cluster.fork()
-  });
-
-} else {
+const express = require('express')
 const app = require('express')()
+const cors = require('cors'); 
 const server = require('http').createServer(app)
-const io = require('socket.io')(server, {cors: {origin: '*'}})
-const PORT = process.env.PORT
+const {Server: SocketIoServer} = require('socket.io')
+const io = new SocketIoServer(server, {
+  cors: {
+    origin: 'http://localhost:5173',
+    methods: ['GET', 'POST'],
+  },
+});
+const dotenv = require('dotenv')
+const Pool = require('pg').Pool
+const PORT = process.env.PORT || 3001
+const router = require('./src/routes/routes')
 
-io.on('connection', socket => {
-  console.log('Usuário conectado!', socket.id);
 
-  socket.on('disconnect', reason => {
-    console.log('Usuário desconectado!', socket.id)
-  })
 
-  socket.on('set_username', username => {
-    socket.data.username = username
-  })
+app.use(express.json())
+app.use(cors())
+app.use(router)
 
-  socket.on('message', text => {
-    io.emit('receive_message', {
-      text,
-      authorId: socket.id,
-      author: socket.data.username
-    })
-    console.log('aiai')
-  })
+dotenv.config()
+
+
+const pool = new Pool({
+  user: process.env.PGUSER,
+  host: process.env.PGHOST,
+  database: process.env.PGDATABASE,
+  password: process.env.PGPASSWORD,
+  port: process.env.PGPORT || 5432,
 })
+
+
+io.on('connection', (socket) => {
+  console.log('Usuário conectado!', socket.data.id);
+
+  socket.on('disconnect', (reason) => {
+    console.log('Usuário desconectado!', socket.data.id)
+  })
+  })
 
 server.listen(PORT, () => 
 console.log(`Worker ${process.pid} is running on port ${PORT}`))
+
+module.exports = {
+  io,
+  pool,
+  server,
+  app,
 }
+
