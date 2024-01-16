@@ -1,21 +1,24 @@
-const { userMiddleware } = require('../utils/userMiddleware')
-const { app, server, io, pool } = require('../../index')
+import { userMiddleware } from '../utils/userMiddleware.js'
+import { app, server, io, pool } from '../../index.js'
+import { v4 as uuidv4 } from 'uuid';
 
-const router = require('express').Router()
-
+import express from 'express';
+const router = express.Router();
 
 
 router.post('/login', async (req, res) => {
     const { username, password } = req.body
-    const { user } = req;
-
+    const user = await pool.query('SELECT * FROM users WHERE username = $1', [username]);
     try {
-        if (user) {
-            if (user.password === password) {
+        if (user.rows.length > 0) {
+            if (user.rows[0].password === password) {
                 res.status(200).send({ username: user.username, id: user.id })
             } else {
                 res.status(401).send({ message: 'Senha incorreta' })
             }
+        }
+        else {
+            res.status(401).send({ message: 'Usuário não existe' })
         }
     } catch (error) {
         console.log(error)
@@ -24,19 +27,26 @@ router.post('/login', async (req, res) => {
 
 router.post('/register', async (req, res) => {
     const { username, password } = req.body
-    const existingUser = req.user;
+    const existingUser = await pool.query('SELECT * FROM users WHERE username = $1', [username]);
+    console.log(username, password)
 
-    if (existingUser) {
+    console.log(existingUser.rows)
+
+    if (existingUser.rows.length > 0) {
         return res.status(400).send({ message: 'Usuário já existe' })
     }
 
+    const userId = uuidv4().replace(/-/g, '').substring(0, 18);
+
+
     try {
         const result = await pool.query(
-            'INSERT INTO users (username, password) VALUES ($1, $2) RETURNING *',
-            [username, password]
+            'INSERT INTO users (user_id, username, password) VALUES ($1, $2, $3) RETURNING *',
+            [userId, username, password]
         )
 
         const newUser = result.rows[0]
+        console.log(newUser)
 
         res.status(201).send({newUser})
     } catch (error) {
@@ -58,4 +68,4 @@ router.get('/messages:', async (req, res) => {
     })
 })
 
-module.exports = router
+export default router;
