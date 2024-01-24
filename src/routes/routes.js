@@ -11,8 +11,8 @@ router.post('/login', async (req, res) => {
     const user = await pool.query('SELECT * FROM users WHERE username = $1', [username]);
     try {
         if (user.rows.length > 0) {
-            if (user.rows[0].password === password) {
-                res.status(200).send({ username: user.username, id: user.id })
+            if (user.rows[0].password === password && user.rows[0].username !== '' && user.rows[0].password !== '') {
+                res.status(200).send({ id: user.rows[0].user_id, username: user.rows[0].username })
             } else {
                 res.status(401).send({ message: 'Senha incorreta' })
             }
@@ -54,18 +54,8 @@ router.post('/register', async (req, res) => {
     }
 });
 
-router.get('/messages:', async (req, res) => {
-
-    io.on('connection', async (socket) => {
-        socket.on('message', text => {
-            io.emit('receive_message', {
-              text,
-              authorId: socket.id,
-              author: socket.data.username
-            })
-            console.log('aiai')
-          })
-    })
+router.get('/messages', async (req, res) => {
+    res.status(200).json({ success: true });            
 })
 
 export default router;

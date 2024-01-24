@@ -33,11 +33,27 @@ const pool = new Pool({
 
 
 io.on('connection', (socket) => {
+
+  const userId = socket.handshake.query.userId;
+
+  socket.data.id = userId;
+
   console.log('Usuário conectado!', socket.data.id);
 
   socket.on('disconnect', (reason) => {
     console.log('Usuário desconectado!', socket.data.id)
+    
   })
+  socket.on('message', async (data) => {
+    // Emitir para todos os clientes, excluindo o remetente
+    io.emit('receive_message', {
+      text: data.text,
+      authorId: data.authorId,
+      author: data.author,
+    });
+
+    console.log('Mensagem recebida e emitida', data.authorId, data.author, data.text);
+    });
   })
 
 
