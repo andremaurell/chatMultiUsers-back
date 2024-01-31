@@ -7,7 +7,7 @@ const server = http.createServer(app);
 import { Server as SocketIoServer } from 'socket.io';
 const io = new SocketIoServer(server, {
   cors: {
-    origin: 'https://chat-multi-users-front.vercel.app/',
+    origin: 'https://chat-multi-users-front.vercel.app',
     methods: ['GET', 'POST'],
   },
 });
