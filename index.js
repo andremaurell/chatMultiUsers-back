@@ -7,7 +7,7 @@ const server = http.createServer(app);
 import { Server as SocketIoServer } from 'socket.io';
 const io = new SocketIoServer(server, {
   cors: {
-    origin: 'http://localhost:5173',
+    origin: 'https://chat-multi-users-front.vercel.app/',
     methods: ['GET', 'POST'],
   },
 });
@@ -41,7 +41,6 @@ io.on('connection', (socket) => {
     
   })
   socket.on('message', async (data) => {
-    // Emitir para todos os clientes, excluindo o remetente
     io.emit('receive_message', {
       text: data.text,
       authorId: data.authorId,
