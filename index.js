@@ -60,6 +60,6 @@ console.log(`Worker ${process.pid} is running on port ${PORT}`))
 
 
 
-export { app, server, io, pool };
+export default { app, server, io, pool };
 
 
