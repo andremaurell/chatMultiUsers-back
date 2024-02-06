@@ -14,6 +14,7 @@ import router from './src/routes/routes.js';
 
 app.use(json())
 app.use(cors())
+router.use(cors())
 app.use(express.urlencoded({ extended: true }));
 app.use(router)
 
