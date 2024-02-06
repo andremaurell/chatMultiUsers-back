@@ -5,13 +5,7 @@ import cors from 'cors';
 import http from 'http';
 const server = http.createServer(app);
 import { Server as SocketIoServer } from 'socket.io';
-const io = new SocketIoServer(server, {
-  cors: {
-    origin: ['https://chat-multi-users-front.vercel.app'],
-    methods: ['GET', 'POST'],
-    credentials: true,
-  },
-});
+
 import { config } from 'dotenv';
 import pkg from 'pg';
 const { Pool } = pkg;
@@ -24,6 +18,14 @@ app.use(express.urlencoded({ extended: true }));
 app.use(router)
 
 config()
+
+const io = new SocketIoServer(server, {
+  cors: {
+    origin: ['https://chat-multi-users-front.vercel.app'],
+    methods: ['GET', 'POST'],
+    credentials: true,
+  },
+});
 
 const pool = new Pool({
   connectionString: process.env.POSTGRES_URL + "?sslmode=require",
