@@ -2,8 +2,8 @@ import { json } from 'express';
 import express from 'express';
 const app = express();
 import cors from 'cors'; 
-import https from 'https';
-const server = https.createServer(app);
+import http from 'http';
+const server = http.createServer(app);
 import { Server as SocketIoServer } from 'socket.io';
 const io = new SocketIoServer(server, {
   cors: {
