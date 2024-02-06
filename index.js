@@ -7,8 +7,9 @@ const server = http.createServer(app);
 import { Server as SocketIoServer } from 'socket.io';
 const io = new SocketIoServer(server, {
   cors: {
-    origin: 'https://chat-multi-users-front.vercel.app',
+    origin: ['https://chat-multi-users-front.vercel.app'],
     methods: ['GET', 'POST'],
+    credentials: true,
   },
 });
 import { config } from 'dotenv';
@@ -19,6 +20,7 @@ import router from './src/routes/routes.js';
 
 app.use(json())
 app.use(cors())
+app.use(express.urlencoded({ extended: true }));
 app.use(router)
 
 config()

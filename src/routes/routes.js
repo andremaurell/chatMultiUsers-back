@@ -6,6 +6,13 @@ import express from 'express';
 const router = express.Router();
 
 
+router.use(userMiddleware)
+
+
+router.get('/', (req, res) => {
+    res.json("Welcome to the chat app")
+})
+
 router.post('/login', async (req, res) => {
     const { username, password } = req.body
     const user = await pool.query('SELECT * FROM users WHERE username = $1', [username]);
