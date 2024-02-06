@@ -2,12 +2,12 @@ import { json } from 'express';
 import express from 'express';
 const app = express();
 import cors from 'cors'; 
-import http from 'http';
-const server = http.createServer(app);
+import https from 'https';
+const server = https.createServer(app);
 import { Server as SocketIoServer } from 'socket.io';
 const io = new SocketIoServer(server, {
   cors: {
-    origin: [''],
+    origin: ['https://chat-multi-users-front.vercel.app/'],
     methods: ['GET', 'POST'],
     credentials: true,
   },
