@@ -22,7 +22,7 @@ config()
 
 const io = new SocketIoServer(server, {
   cors: {
-    origin: ['https://chat-multi-users-front-git-main-andremaurell.vercel.app:443'],
+    origin: ['https://chat-multi-users-front.vercel.app:443'],
     methods: ['GET', 'POST'],
     credentials: true,
   },
