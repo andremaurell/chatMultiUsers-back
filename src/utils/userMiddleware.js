@@ -1,4 +1,4 @@
-import { app, server, io, pool } from '../../index.js'
+import { pool } from '../../index.js'
 
 const userMiddleware = async (req, res, next) => {
     try {

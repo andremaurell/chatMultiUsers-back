@@ -1,5 +1,5 @@
 import { userMiddleware } from '../utils/userMiddleware.js'
-import { app, server, io, pool } from '../../index.js'
+import { pool } from '../../index.js'
 import { v4 as uuidv4 } from 'uuid';
 
 import express from 'express';
