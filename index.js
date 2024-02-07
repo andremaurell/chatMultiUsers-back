@@ -22,7 +22,7 @@ config()
 
 const io = new SocketIoServer(server, {
   cors: {
-    origin: "*",
+    origin: ["https://chatmultiusers-front-production.up.railway.app"],
     methods: ['GET', 'POST'],
   },
 });
