@@ -56,6 +56,9 @@ io.on('connection', (socket) => {
     });
   })
 
-export default pool;
+server.listen(PORT, () => 
+console.log(`Worker ${process.pid} is running on port ${PORT}`))
+
+export { app, server, io, pool };
 
 
