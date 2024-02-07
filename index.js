@@ -24,6 +24,7 @@ const io = new SocketIoServer(server, {
   cors: {
     origin: ['https://chat-multi-users-front.vercel.app'],
     methods: ['GET', 'POST'],
+    accessControlAllowOrigin: ['https://chat-multi-users-front.vercel.app'],
   },
 });
 
