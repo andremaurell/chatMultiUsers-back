@@ -44,6 +44,10 @@ io.on('connection', (socket) => {
     console.log('Usuário desconectado!', socket.data.id)
     
   })
+
+  socket.on('reconnect', () => {
+    console.log('Reconectado ao servidor Socket.IO');
+  });
   socket.on('message', async (data) => {
     io.emit('receive_message', {
       text: data.text,
