@@ -55,11 +55,11 @@ io.on('connection', (socket) => {
     console.log('Mensagem recebida e emitida', data.authorId, data.author, data.text);
     });
   })
+  
 
-
-
-server.listen(PORT, () => 
-console.log(`Worker ${process.pid} is running on port ${PORT}`))
+export default async (req, res) => {
+    await server.listen(process.env.PORT);
+};
 
 
 
