@@ -55,14 +55,7 @@ io.on('connection', (socket) => {
     console.log('Mensagem recebida e emitida', data.authorId, data.author, data.text);
     });
   })
-  
 
-export default async (req, res) => {
-    await server.listen(process.env.PORT);
-};
-
-
-
-export { pool };
+export default pool;
 
 
