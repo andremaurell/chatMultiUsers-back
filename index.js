@@ -9,7 +9,7 @@ import { Server as SocketIoServer } from 'socket.io';
 import { config } from 'dotenv';
 import pkg from 'pg';
 const { Pool } = pkg;
-const PORT = process.env.PORT || 3001
+const PORT = process.env.PORT || 5000
 import router from './src/routes/routes.js';
 
 app.use(json())
