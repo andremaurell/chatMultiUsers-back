@@ -49,7 +49,7 @@ io.on('connection', (socket) => {
     console.log('Reconectado ao servidor Socket.IO');
   });
   socket.on('message', async (data) => {
-    io.emit('receive_message', {
+    socket.emit('receive_message', {
       text: data.text,
       authorId: data.authorId,
       author: data.author,
